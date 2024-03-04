@@ -1,0 +1,175 @@
+---
+title: "Day1 - Exercise 1"
+subtitle: "Example struma"
+author: "YOUR NAME"
+date: "`r Sys.Date()`"
+output: 
+   html_document:
+     toc: TRUE
+     toc_float: TRUE
+---
+
+```{r setup, include = FALSE}
+# settings for output
+  knitr::opts_chunk$set(echo = TRUE)
+
+# Change setting of figure width and height
+  knitr::opts_chunk$set(fig.width = ggplot2::unit(10, "cm"), fig.height = ggplot2::unit(8, "cm"))
+
+
+# libraries used in this Rmd
+  library(ggplot2)
+  library(tidyverse)
+  library(flextable)
+  library(gtsummary)
+```
+
+```{r,  echo = FALSE, eval = TRUE}
+# Load Rdata file
+  filename <- list.files(path = "../Rdata/", pattern = "struma_prepared")
+
+ load(file = paste0("../Rdata/", filename))
+
+# show general information about dataset
+
+ info$general %>% 
+   flextable::flextable() %>% 
+   flextable::font(., fontname = "Cambria (Textkörper)", part = "all") %>%
+      flextable::fontsize(., size = 10 , part = "all") %>%
+      flextable::padding(padding.top = 0,
+                         padding.bottom = 0, part = "body") %>% 
+  
+      flextable::hline(.,
+              border = officer::fp_border(color = "grey70", style = "dotted")) %>%
+      # flextable::align(., j = 1, part = "all") %>%
+      flextable::bg(., bg = "grey90", part = "header") %>% 
+      flextable::bold(., bold = TRUE, part = "header") %>% 
+      flextable::autofit()  
+
+```
+
+
+
+# Data set - struma
+
+A goitre, or goiter, is a swelling in the neck resulting from an enlarged thyroid gland. 
+[in German: goiter = Struma; goitre = Kropf].
+
+
+In patients with goiter, a clinical study was conducted to investigate whether medication in addition to standard therapy (MED; yes/no) has an effect on thyroid hormones FT3, FT4 and TSH. 
+
+* Glucose was tested before and 1 hour after administering
+
+The data set contains following parameters
+
+```{r, results='asis', include = FALSE}
+mylist <- names(dt_struma)
+cat(paste("-", mylist), sep = "\n")
+```
+
+
+for `r nrow(dt_struma)`` patients.
+
+```{r}
+# TO DO: Show first few lines w/o weight_1year,  abd_grith, hip_size
+ 
+ dt_struma %>% 
+  select(-all_of(c("weight_1year", "abd_grith", "hip_size"))) %>% 
+  filter(row_number() <6) %>% 
+  flextable::flextable()
+
+```
+
+# Tables
+## Descriptive statistics
+
+**TO DO**
+
+* Generate a table with descriptive statistics for all parameters separated by medication (MED)
+   - look at homepage of gtsummary: https://www.danieldsjoberg.com/gtsummary/
+   - tbl_summary()
+      + look at arguments: 'included', 'by'
+      + hint for 'included': use negative sign ,e.g., '-c(test)'
+* Optional
+   - make the parameter labels bold
+   - add the spanning header 'Medication'
+   - change for continuous parameters the statistic from 'median (IQR)' to 'mean (SD)'
+
+```{r}
+# table with descriptive statistics
+ 
+
+```
+
+## Plots for descriptive statistics
+### gender
+
+**TO DO**
+
+* generate an appropriate plot for gender separated by medication
+    - use different colors for categories of medication
+    - change legend position to the bottom
+    
+
+```{r}
+# plot gender
+
+  
+```
+
+### age 
+**TO DO**
+
+* generate two different plots for age separated by medication
+   - use different colors for categories of medication
+   - change legend position to the bottom
+   - hint: 'facet_grid()' is useful if you want automatized panels
+* Optional
+   - generate a quantile plot to investigate if age follows a normal distribution 
+      + hint: geom_qq(), geom_qq_line()
+   - change colors for the two medication categories to: #00AFBB and #E7B800
+
+```{r}
+# plot1 age
+
+ 
+```
+
+
+```{r}
+# plot2 age
+
+```
+
+```{r}
+# QQ plot age
+
+
+
+```
+
+
+## Summary tables
+**TO DO (optional)**
+
+* Sometimes it is interesting to get summary information from your data, e.g., for each category of gender you want to know
+   - how many observations
+   - what is the minimum age and maximum age observed
+   
+```{r, eval = TRUE, echo = TRUE}
+# summary table
+  # use round() to have only 1 decimal place for the columns with age
+  # use flextable() to get a nicer output
+
+dt_struma %>%
+  group_by(gender) %>% 
+  summarize(n_total = n()) %>% 
+  flextable::flextable()
+
+```
+ 
+
+  
+   
+
+
