@@ -1,5 +1,5 @@
 # ATSP-2024
-Materials for 'Advanced Topics in Scientific Programming' (LV 0940.198)
+Materials for 'Advanced Topics in Scientific Programming' (LV 0940.198), SS 2024.
 
 ## License
 
