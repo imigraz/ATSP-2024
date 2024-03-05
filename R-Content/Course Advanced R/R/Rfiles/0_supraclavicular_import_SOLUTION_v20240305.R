@@ -121,7 +121,7 @@
       dt_supraclavicular <-
         readxl::read_xlsx(path = paste0(path_Rdata, file_input),
                           sheet = "data",
-                          na = c("no observations"),
+                          na = c("no observation"),
                           col_names = TRUE)
 
   
