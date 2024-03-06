@@ -1,5 +1,5 @@
 ---
-title: "Day3 - Exercise 2 (SOLUTION)"
+title: "Day3 - Exercise 2"
 subtitle: "Example functions"
 author: "YOUR NAME"
 date: "`r Sys.Date()`"
