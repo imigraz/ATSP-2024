@@ -1,0 +1,71 @@
+## `r var_int_lab`
+
+```{r, warning = FALSE, eval = TRUE, echo = FALSE}
+# table
+ dt_analysis %>%
+  tbl_summary(include = all_of(c(var_int)),
+            
+              type = list(var_int ~ "continuous2"),
+              statistic = list(all_continuous2() ~ c("{median} ({p25} - {p75})", 
+                                                   "{min} - {max}",
+                                                   "{mean} ({sd})"))) %>% 
+  bold_labels() 
+```
+
+```{r, eval = TRUE, echo = FALSE}
+# boxplot ---
+p_boxplot <- 
+  ggplot(data = dt_analysis,
+         aes(x = get(var_int))) +
+    geom_boxplot() +
+    
+    xlab(var_int_lab) +
+   
+    
+    
+    theme_bw()+
+    theme(legend.position = "bottom")
+
+  
+# histogramm ---
+p_hist <-
+  ggplot(data = dt_analysis,
+         aes(x = get(var_int))) +
+    geom_histogram(color = "black") +
+  
+     xlab(var_int_lab) +
+     
+     theme_bw()+
+     theme(legend.position = "bottom")
+
+# qq plot ---
+p_qqplot <-
+  ggplot(data = dt_analysis,
+         aes(sample = get(var_int))) +
+    geom_qq() +
+    geom_qq_line() +
+  
+      xlab("Theoretical") +
+      ylab("Sample") +
+    
+    theme_bw() 
+
+# one big plot with panels
+
+pA <- p_boxplot 
+pC <- p_hist 
+pB <- p_qqplot 
+
+
+
+cowplot::plot_grid(pA, pB, pC, nrow = 2, ncol = 2, labels = c("A", "B", "C", NA))
+
+```
+
+
+
+```{r}
+# remove objects
+rm(p_hist, p_qqplot, p_boxplot, pA, pB, pC)
+  
+```

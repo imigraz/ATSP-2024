@@ -46,9 +46,10 @@
 #  FUNCTIONS ----
 # ------------------------- #
  
-   # none here
-    
-    
+    roundM <- function(x, n = 0) {
+      scale <- 10^n
+      sign(x) * trunc(abs(x) * scale + 0.5) / scale
+    } 
    
     
 # --------------------------------------------------------------------------- #
@@ -80,7 +81,7 @@
   
   
 # --------------------------------------------------------------------------- #
-#  INFORMATION GENERAL ----
+#  GENERATE ----
 # --------------------------------------------------------------------------- #
 
     # It is good habit to keep track on information regarding the data set we use

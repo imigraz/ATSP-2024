@@ -1,5 +1,5 @@
 ---
-title: "Day3 - Exercise 1"
+title: "Day3 - Exercise 1 (SOLUTION)"
 subtitle: "Example wide/long format"
 author: "YOUR NAME"
 date: "`r Sys.Date()`"
@@ -52,12 +52,19 @@ We can use the pivot_longer() function to pivot this data frame into a long form
  #       such that in the end your column headers are
  #        patient, age, measurement, systbp
 
-
+ dt_study_long <-
+  dt_study %>% 
+    pivot_longer(data = ., 
+                 cols = c(sysbp1, sysbp2, sysbp3),
+                 names_to = "measurement",
+                 values_to = "systbp")
 ```
 
 ```{r,  echo = TRUE, eval = TRUE}
 # Look at dt_study_long
-
+dt_study_long %>% 
+  head() %>% 
+  flextable()
 ```
 
 ```{r,  echo = TRUE, eval = TRUE}
@@ -65,6 +72,11 @@ We can use the pivot_longer() function to pivot this data frame into a long form
   # hint: you need to have in aes(..., group = patient)
   #       try also to have colour related to parameter patient
 
+ggplot(data = dt_study_long,
+       aes(x = measurement, y = systbp, colour = patient, group = patient)) +
+  geom_line() +
+  geom_point() +
+  theme_bw()
 ```
 
 # Example 2: use pivot_longer()
@@ -91,7 +103,6 @@ We can use again the pivot_longer() function to pivot this data frame into a lon
  # hint: you will need two separate pivot_longer calls, one for each new column you want to create
  # hint; copy code for dt1 and adapt it to get dt2 with the dates instead of systbp
  #  if dt1 and dt2 work use code which is currently in comments (use ?left_join to see what this function does)
-
 dt1 <-
    dt_study2 %>% 
     select(patient, age, sysbp1, sysbp2, sysbp3) %>% 
@@ -100,21 +111,29 @@ dt1 <-
                  values_to = "systbp") %>% 
    mutate(measurement = str_remove(string = measurement, pattern = "sysbp"))
 
-
+dt2 <-
+   dt_study2 %>% 
+    select(patient, age, date1, date2, date3) %>% 
+    pivot_longer(cols = c(date1, date2, date3),
+                 names_to = "measurement",
+                 values_to = "dates") %>% 
+   mutate(measurement = str_remove(string = measurement, pattern = "date"))
  
    
- # dt_study2_long <-
- #   left_join(x = dt1,
- #             y = dt2,
- #             by = c("patient" = "patient",
- #                    "age" = "age",
- #                    "measurement" = "measurement"))
+ dt_study2_long <-
+   left_join(x = dt1,
+             y = dt2,
+             by = c("patient" = "patient",
+                    "age" = "age",
+                    "measurement" = "measurement"))
 
 ```
 
 ```{r,  echo = TRUE, eval = TRUE}
 # Look at dt_study2_long
-
+dt_study2_long %>% 
+  head() %>% 
+  flextable()
 ```
 
 ```{r,  echo = TRUE, eval = TRUE}
@@ -123,7 +142,12 @@ dt1 <-
   #       try also to have colour related to parameter patient
   # hint: set the scale limits for y-axis such that you can see values between 75 and 125
 
-
+ggplot(data = dt_study2_long,
+       aes(x = dates, y = systbp, colour = patient, group = patient)) +
+  geom_line() +
+  geom_point() +
+  ylim(c(75, 125)) +
+  theme_bw()
 ```
 
 
@@ -148,12 +172,16 @@ We can use the pivot_wider() function to pivot this data frame into a wide forma
  #       such that in the end your column headers are
  #        player, bloodgroup,  year, points, assists
 
- 
+ dt_game_wide <-
+  dt_game %>% 
+    pivot_wider(names_from = stat, values_from = amount)
 ```
 
 ```{r,  echo = TRUE, eval = TRUE}
 # Look at dt_game_wide
-
+dt_game_wide %>% 
+  head() %>% 
+  flextable()
 ```
 
 
@@ -164,25 +192,35 @@ Load struma dataset
 * plot weight with the two measurements and colour the lines according to the bloodgroup
 ```{r,  echo = FALSE, eval = TRUE}
 # Load struma Rdata file
-  
+  filename <- list.files(path = "../Rdata/", pattern = "struma_prepared")
+
+ load(file = paste0("../Rdata/", filename))
 ```
 
 
 ```{r,  echo = TRUE, eval = TRUE}
 # pivot the data frame into a long format (save it as dt_struma_long)
-
 # hint: work first with select() before you use pivot_longer()
- #      we will need only: PatId, bloodgrp, weight, weight_1year
+#      we will need only: PatId, bloodgrp, weight, weight_1year
  
 
-
+ dt_study_long <-
+  dt_struma %>% 
+    select(PatId, bloodgrp, weight, weight_1year) %>% 
+    pivot_longer(cols = c(weight, weight_1year),
+                 names_to = "measurement",
+                 values_to = "weight")
 ```
 
 
 ```{r,  echo = TRUE, eval = TRUE}
-# plot sweight and measuremnt with ggplot and geom_line()
+# plot weight and measurement with ggplot and geom_line()
   # hint: you need to have in aes(..., group = patient)
   #       try also to have colour related to parameter bloodgroup
 
-
+ggplot(data = dt_study_long,
+       aes(x = measurement, y = weight, colour = bloodgrp, group = PatId)) +
+  geom_line() +
+  geom_point() +
+  theme_bw()
 ```
